@@ -12,8 +12,13 @@ function Input({
 }) {
   return (
     <section className="input">
-      <label className="input__label">{label}</label>
+      {/* Åtgärd: Label och Input var inte länkade (saknade id/for). 
+          Lade till htmlFor och id för att RTL ska kunna hitta fältet med getByLabelText(). */}
+      <label className="input__label" htmlFor={name}> 
+        {label}
+      </label>
       <input
+        id={name}
         type={type}
         className={`input__field ${customClass ? customClass : ""}`}
         name={name}
