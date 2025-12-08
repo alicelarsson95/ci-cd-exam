@@ -12,8 +12,7 @@ function Input({
 }) {
   return (
     <section className="input">
-      {/* Åtgärd: Label och Input var inte länkade (saknade id/for). 
-          Lade till htmlFor och id för att RTL ska kunna hitta fältet med getByLabelText(). */}
+      {/* La till id och htmlFor så label kopplas rätt till input. */}
       <label className="input__label" htmlFor={name}> 
         {label}
       </label>

@@ -27,7 +27,7 @@ describe("Booking page basic rendering", () => {
 
     expect(screen.getByRole("button", { name: /strIIIIIike!/i })).toBeInTheDocument();
   });
-  test("completes a booking and saves confirmation (G requirement)", async () => {
+  test("completes a booking and saves confirmation", async () => {
     sessionStorage.clear();
 
     const user = userEvent.setup();
