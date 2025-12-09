@@ -4,8 +4,10 @@ import { expect, test, describe, vi } from "vitest";
 import BookingInfo from "../../src/components/BookingInfo/BookingInfo";
 
 describe("BookingInfo Component", () => {
-  test("verifies date and time inputs update state correctly", async () => {
+  test("updates booking details when user enters date and time", async () => {
+    // "Användaren ska kunna ange datum och tid."
     const mockUpdateDetails = vi.fn();
+
     render(<BookingInfo updateBookingDetails={mockUpdateDetails} />);
 
     const dateInput = screen.getByLabelText("Date");
@@ -14,15 +16,18 @@ describe("BookingInfo Component", () => {
     const timeInput = screen.getByLabelText("Time");
     await userEvent.type(timeInput, "19:00");
 
-    const lastCall = mockUpdateDetails.mock.calls.at(-1)[0];
-    expect(lastCall.target.value).toBe("19:00");
-    expect(lastCall.target.name).toBe("time");
+    const lastTimeEvent = mockUpdateDetails.mock.calls.at(-1)[0];
+
+    expect(lastTimeEvent.target.name).toBe("time");
+    expect(lastTimeEvent.target.value).toBe("19:00");
 
     expect(mockUpdateDetails).toHaveBeenCalledTimes(2);
   });
 
-  test("verifies number inputs for people and lanes update state correctly", async () => {
+  test("updates booking details when entering number of players and lanes", async () => {
+    // "Användaren ska kunna ange antal spelare och antal banor."
     const mockUpdateDetails = vi.fn();
+
     render(<BookingInfo updateBookingDetails={mockUpdateDetails} />);
 
     const peopleInput = screen.getByLabelText("Number of awesome bowlers");
@@ -31,9 +36,10 @@ describe("BookingInfo Component", () => {
     const lanesInput = screen.getByLabelText("Number of lanes");
     await userEvent.type(lanesInput, "2");
 
-    const lastLaneCall = mockUpdateDetails.mock.calls.at(-1)[0];
-    expect(lastLaneCall.target.value).toBe("2");
-    expect(lastLaneCall.target.name).toBe("lanes");
+    const lastLanesEvent = mockUpdateDetails.mock.calls.at(-1)[0];
+
+    expect(lastLanesEvent.target.name).toBe("lanes");
+    expect(lastLanesEvent.target.value).toBe("2");
 
     expect(mockUpdateDetails).toHaveBeenCalledTimes(2);
   });

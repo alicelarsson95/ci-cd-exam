@@ -18,9 +18,11 @@ function Confirmation() {
       <Top title="See you soon!" />
       {state || confirmation ? (
         <form className="confirmation__details">
+          {/* La till "name" på alla fält här också, så de funkar på samma sätt som övriga inputs och blir lättare att hitta i testerna. */}
           <Input
             label="When"
             type="text"
+            name="when"
             customClass="confirmation__input"
             defaultValue={confirmation.when.replace("T", " ")}
             disabled="disabled"
@@ -28,6 +30,7 @@ function Confirmation() {
           <Input
             label="Who"
             type="text"
+            name="people"
             customClass="confirmation__input"
             defaultValue={confirmation.people}
             disabled="disabled"
@@ -35,6 +38,7 @@ function Confirmation() {
           <Input
             label="Lanes"
             type="text"
+            name="lanes"
             customClass="confirmation__input"
             defaultValue={confirmation.lanes}
             disabled="disabled"
@@ -42,6 +46,7 @@ function Confirmation() {
           <Input
             label="Booking number"
             type="text"
+            name="bookingId"
             customClass="confirmation__input"
             defaultValue={confirmation.bookingId}
             disabled="disabled"
@@ -55,7 +60,7 @@ function Confirmation() {
           </button>
         </form>
       ) : (
-        <h2 className="confirmation__no-booking">Inga bokning gjord!</h2>
+        <h2 className="confirmation__no-booking">Ingen bokning gjord!</h2>
       )}
     </section>
   );
