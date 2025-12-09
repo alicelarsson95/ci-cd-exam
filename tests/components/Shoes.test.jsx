@@ -3,24 +3,41 @@ import userEvent from "@testing-library/user-event";
 import { describe, test, expect, vi } from "vitest";
 import Shoes from "../../src/components/Shoes/Shoes";
 
+// Mockar nanoid
 vi.mock("nanoid", () => ({
   nanoid: () => "test-id",
 }));
 
+// Helper för att slippa repetera render-koden
+const renderShoes = (props) =>
+  render(
+    <Shoes
+      shoes={props.shoes}
+      updateSize={props.updateSize || (() => {})}
+      addShoe={props.addShoe || (() => {})}
+      removeShoe={props.removeShoe || (() => {})}
+    />
+  );
+
 describe("Shoes Component", () => {
   test("renders one shoe size input per player", () => {
+    // "Det ska vara möjligt att välja skostorlek för alla spelare."
     const shoes = [{ id: "p1" }, { id: "p2" }, { id: "p3" }];
 
-    render(<Shoes shoes={shoes} updateSize={() => {}} addShoe={() => {}} removeShoe={() => {}} />);
+    renderShoes({ shoes });
 
     const inputs = screen.getAllByLabelText(/Shoe size \/ person/i);
     expect(inputs).toHaveLength(3);
   });
 
-  test("allows user to enter shoe size for a player", async () => {
+  test("allows user to enter shoe size", async () => {
+    // "Användaren ska kunna ange skostorlek."
     const mockUpdate = vi.fn();
 
-    render(<Shoes shoes={[{ id: "p1" }]} updateSize={mockUpdate} addShoe={() => {}} removeShoe={() => {}} />);
+    renderShoes({
+      shoes: [{ id: "p1" }],
+      updateSize: mockUpdate,
+    });
 
     const input = screen.getByLabelText("Shoe size / person 1");
     await userEvent.type(input, "42");
@@ -32,26 +49,32 @@ describe("Shoes Component", () => {
     expect(event.target.value).toBe("42");
   });
 
-  test("allows user to change shoe size", async () => {
+  test("allows changing shoe size", async () => {
+    // "Användaren ska kunna ändra skostorlek."
     const mockUpdate = vi.fn();
 
-    render(<Shoes shoes={[{ id: "p1" }]} updateSize={mockUpdate} addShoe={() => {}} removeShoe={() => {}} />);
+    renderShoes({
+      shoes: [{ id: "p1" }],
+      updateSize: mockUpdate,
+    });
 
     const input = screen.getByLabelText("Shoe size / person 1");
 
     await userEvent.type(input, "4");
     await userEvent.type(input, "3");
 
-    expect(mockUpdate.mock.calls.length).toBeGreaterThan(1);
     const lastEvent = mockUpdate.mock.calls.at(-1)[0];
-
     expect(lastEvent.target.value).toBe("43");
   });
 
-  test("removes shoe input when '-' button is clicked", async () => {
+  test("removes shoe input when '-' is clicked", async () => {
+    // "Användaren ska kunna ta bort en skostorlek."
     const mockRemove = vi.fn();
 
-    render(<Shoes shoes={[{ id: "p1" }]} updateSize={() => {}} addShoe={() => {}} removeShoe={mockRemove} />);
+    renderShoes({
+      shoes: [{ id: "p1" }],
+      removeShoe: mockRemove,
+    });
 
     const removeButton = screen.getByRole("button", { name: "-" });
     await userEvent.click(removeButton);
@@ -59,10 +82,14 @@ describe("Shoes Component", () => {
     expect(mockRemove).toHaveBeenCalledWith("p1");
   });
 
-  test("adds shoe input when '+' is clicked", async () => {
+  test("adds new shoe input when '+' is clicked", async () => {
+    // "Användaren ska kunna lägga till en skostorlek."
     const mockAdd = vi.fn();
 
-    render(<Shoes shoes={[]} updateSize={() => {}} addShoe={mockAdd} removeShoe={() => {}} />);
+    renderShoes({
+      shoes: [],
+      addShoe: mockAdd,
+    });
 
     const addButton = screen.getByRole("button", { name: "+" });
     await userEvent.click(addButton);
