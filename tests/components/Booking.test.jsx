@@ -69,9 +69,7 @@ describe("Booking Page", () => {
   });
 
   test("shows error when players exceed max allowed per lane", async () => {
-  // Om antalet spelare överstiger vad en bana kan hantera,
-  // (jag bestämde max 4 spelare per bana) ska ett felmeddelande visas.
-
+  // "Om antalet spelare överstiger vad en bana kan hantera ska ett felmeddelande visas."
     const user = userEvent.setup();
 
     renderBooking();
